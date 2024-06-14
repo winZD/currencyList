@@ -24,16 +24,16 @@ function History() {
       {currency}
       {loading && "LOADING"}
       {currencyHistory !== null && (
-        <div className="card">
-          {currencyHistory.map((history) => (
-            <>
+        <div>
+          {currencyHistory.map((history, index) => (
+            <div className="card" key={index}>
               <span>{history?.drzava}</span>
               <span>{history?.broj_tecajnice}</span>
               <span>{history?.kupovni_tecaj}</span>
               <span>{history?.prodajni_tecaj}</span>
               <span>{history?.sifra_valute}</span>
               <span>{history?.srednji_tecaj}</span>
-            </>
+            </div>
           ))}
         </div>
       )}

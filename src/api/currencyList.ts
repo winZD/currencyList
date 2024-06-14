@@ -13,3 +13,12 @@ export const getHistoryByCurrency = async (currency: string) => {
 
   return res;
 };
+export const getHistoryByDate = async (currency: string, date: string) => {
+  const res = fetch(
+    `https://api.hnb.hr/tecajn-eur/v3?valuta=${currency}&datum-primjene-od=${date}`
+  )
+    .then((response) => response.json())
+    .then((json) => json);
+
+  return res;
+};
