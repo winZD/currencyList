@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Currency } from "../api/models/currency";
-import getCurrency from "../api/currencyList";
+import { getCurrency } from "../api/currencyList";
 
 function CurrencyList() {
   const [currencies, setCurrencies] = useState<Currency[]>([]);
