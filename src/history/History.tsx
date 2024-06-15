@@ -21,7 +21,6 @@ function History() {
   }, []);
   return (
     <div className="container">
-      {currency}
       {loading && "LOADING"}
       {currencyHistory !== null && (
         <div>
