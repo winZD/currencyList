@@ -7,4 +7,5 @@ export interface Currency {
   prodajni_tecaj: string;
   sifra_valute: string;
   srednji_tecaj: string;
+  valuta: string;
 }

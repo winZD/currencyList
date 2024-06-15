@@ -1,0 +1,24 @@
+/* Table Styling */
+table {
+    width: 100%; /* Full-width */
+    border-collapse: collapse; /* Collapse borders */
+    margin-bottom: 20px; /* Add some space under the table */
+  }
+  
+  /* Header Styling */
+  thead th {
+    background-color: #f2f2f2; /* Light grey background */
+    text-align: left; /* Align text to the left */
+    padding: 8px; /* Add some padding */
+    font-weight: bold; /* Make header text bold */
+    border-top: 2px solid #ddd; /* Top border */
+    border-bottom: 2px solid #ddd; /* Bottom border */
+  }
+  
+  /* Body Styling */
+  tbody td {
+    border-top: 1px solid #ddd; /* Top border */
+    border-bottom: 1px solid #ddd; /* Bottom border */
+    padding: 8px; /* Add some padding */
+    text-align: left; /* Align text to the left */
+  }
