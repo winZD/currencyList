@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getHistoryByCurrency } from "../api/currencyList";
+import {
+  getExchangeRateDifferences,
+  getHistoryByCurrency,
+} from "../api/currencyList";
 import { Currency } from "../api/models/currency";
 import "./history.css";
 
@@ -19,8 +22,17 @@ function History() {
       setLoading(false);
     });
   }, []);
+
+  const fetchExchangeRateDifferences = async (
+    dateFrom: string,
+    dateTo: string
+  ) => {
+    return await getExchangeRateDifferences(dateFrom, dateTo);
+  };
   return (
     <div className="container">
+      <h1>HISTORY</h1>
+      <button onClick={() => ""}>Povijest tečajnih razlika </button>
       {loading && "LOADING"}
       {currencyHistory !== null && (
         <div>

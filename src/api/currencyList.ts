@@ -22,3 +22,16 @@ export const getHistoryByDate = async (currency: string, date: string) => {
 
   return res;
 };
+
+export const getExchangeRateDifferences = async (
+  dateFrom: string,
+  dateTo: string
+) => {
+  const res = fetch(
+    `https://api.hnb.hr/tecajn-eur/v3?datum-primjene-od=${dateFrom}&datum-primjene-do=${dateTo}`
+  )
+    .then((response) => response.json())
+    .then((json) => json);
+
+  return res;
+};

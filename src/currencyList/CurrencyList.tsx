@@ -95,7 +95,7 @@ function CurrencyList() {
         Next
       </button>
       <Link to={`/povijest/${"USD"}/${date.toISOString().substring(0, 10)}`}>
-        <button>Povijest</button>
+        <button onClick={() => {}}>Povijest</button>
       </Link>
       <table>
         <thead>
@@ -129,7 +129,8 @@ function CurrencyList() {
                     navigate(
                       `/povijest/${value.valuta}/${date
                         .toISOString()
-                        .substring(0, 10)}`
+                        .substring(0, 10)}`,
+                      { state: { prev: "/tecaj" } }
                     )
                   }
                   style={{ cursor: "pointer" }}
