@@ -68,85 +68,89 @@ function CurrencyList() {
   }, []);
   return (
     <>
-      <div className="input-container">
-        <input
-          type="text"
-          placeholder="Pretraga"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-      </div>
-      <div className="input-container">
-        <input
-          value={date.toISOString().substring(0, 10)}
-          type="date"
-          onChange={(e) => setDate(new Date(e.target.value))}
-        ></input>
-      </div>{" "}
-      <button
-        onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}
-      >
-        Prev
-      </button>
-      <span>{date.toISOString().substring(0, 10)}</span>
-      <button
-        onClick={() => setDate(new Date(date.setDate(date.getDate() + 1)))}
-      >
-        Next
-      </button>
-      <Link to={`/povijest/${"USD"}/${date.toISOString().substring(0, 10)}`}>
-        <button onClick={() => {}}>Povijest</button>
-      </Link>
-      <table>
-        <thead>
-          <tr>
-            <th>Broj tečajnice</th>
-            <th>Datum primjene </th>
+      <div style={{ width: "100%" }}>
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="Pretraga"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <button
+            onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}
+          >
+            Prev
+          </button>
+          {/*  <span>{date.toISOString().substring(0, 10)}</span> */}
+          <div className="input-container">
+            <input
+              value={date.toISOString().substring(0, 10)}
+              type="date"
+              onChange={(e) => setDate(new Date(e.target.value))}
+            ></input>
+          </div>{" "}
+          <button
+            onClick={() => setDate(new Date(date.setDate(date.getDate() + 1)))}
+          >
+            Next
+          </button>
+        </div>
+        <Link to={`/povijest/${"USD"}/${date.toISOString().substring(0, 10)}`}>
+          <button onClick={() => {}}>Povijest</button>
+        </Link>
+        <table>
+          <thead>
+            <tr>
+              <th>Broj tečajnice</th>
+              <th>Datum primjene </th>
 
-            <th></th>
-            <th onClick={() => toggleSort("drzava")}>
-              {sortField === "drzava" && (order === "asc" ? "▲" : "▼")}
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+              <th></th>
+              <th onClick={() => toggleSort("drzava")}>
+                {sortField === "drzava" && (order === "asc" ? "▲" : "▼")}
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
 
-            {/* <th>Valuta</th>
+              {/* <th>Valuta</th>
             <th>Kupovni za devize</th>
             <th>Srednji za devize</th>
             <th>Prodajni za devize</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {handleSearch(sortData(currencies)).map((value, key) => {
-            return (
-              <tr key={key}>
-                <td>{value.broj_tecajnice}</td>
-                <td>{value.datum_primjene}</td>
-                <td
-                  onClick={() =>
-                    navigate(
-                      `/povijest/${value.valuta}/${date
-                        .toISOString()
-                        .substring(0, 10)}`,
-                      { state: { prev: "/tecaj" } }
-                    )
-                  }
-                  style={{ cursor: "pointer" }}
-                >
-                  {value.valuta}
-                </td>
-                <td>{value.drzava}</td>
-                <td>{value.broj_tecajnice}</td>
-                <td>{value.kupovni_tecaj}</td>
-                <td>{value.srednji_tecaj}</td>
-                <td>{value.prodajni_tecaj}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </tr>
+          </thead>
+          <tbody>
+            {handleSearch(sortData(currencies)).map((value, key) => {
+              return (
+                <tr key={key}>
+                  <td>{value.broj_tecajnice}</td>
+                  <td>{value.datum_primjene}</td>
+                  <td
+                    onClick={() =>
+                      navigate(
+                        `/povijest/${value.valuta}/${date
+                          .toISOString()
+                          .substring(0, 10)}`,
+                        { state: { prev: "/tecaj" } }
+                      )
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    {value.valuta}
+                  </td>
+                  <td>{value.drzava}</td>
+                  <td>{value.broj_tecajnice}</td>
+                  <td>{value.kupovni_tecaj}</td>
+                  <td>{value.srednji_tecaj}</td>
+                  <td>{value.prodajni_tecaj}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
