@@ -48,19 +48,6 @@ function CurrencyList() {
     return d;
   };
 
-  /*  const handleSorting = (sortField: string, sortOrder) => {
-    if (sortField) {
-      const sorted = [...tableData].sort((a, b) => {
-        return (
-          a[sortField].toString().localeCompare(b[sortField].toString(), "en", {
-            numeric: true,
-          }) * (sortOrder === "asc" ? 1 : -1)
-        );
-      });
-      setTableData(sorted);
-    }
-  };
- */
   useEffect(() => {
     getCurrency().then((data) => {
       setCurrencies(data);
@@ -69,37 +56,46 @@ function CurrencyList() {
   return (
     <>
       <div style={{ width: "100%" }}>
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="Pretraga"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-        </div>
-        <div className="filter">
-          <button
-            onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}
+        <div className="filter-wrapper">
+          <div className="filter">
+            <div className="input-container">
+              <input
+                type="text"
+                placeholder="Pretraži"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            </div>
+            <button
+              onClick={() =>
+                setDate(new Date(date.setDate(date.getDate() - 1)))
+              }
+            >
+              Prev
+            </button>
+            {/*  <span>{date.toISOString().substring(0, 10)}</span> */}
+            <div className="input-container">
+              <input
+                value={date.toISOString().substring(0, 10)}
+                type="date"
+                onChange={(e) => setDate(new Date(e.target.value))}
+              ></input>
+            </div>{" "}
+            <button
+              onClick={() =>
+                setDate(new Date(date.setDate(date.getDate() + 1)))
+              }
+            >
+              Next
+            </button>
+          </div>
+          <Link
+            to={`/povijest/${"USD"}/${date.toISOString().substring(0, 10)}`}
           >
-            Prev
-          </button>
-          {/*  <span>{date.toISOString().substring(0, 10)}</span> */}
-          <div className="input-container">
-            <input
-              value={date.toISOString().substring(0, 10)}
-              type="date"
-              onChange={(e) => setDate(new Date(e.target.value))}
-            ></input>
-          </div>{" "}
-          <button
-            onClick={() => setDate(new Date(date.setDate(date.getDate() + 1)))}
-          >
-            Next
-          </button>
+            <button onClick={() => {}}>Povijest</button>
+          </Link>
         </div>
-        <Link to={`/povijest/${"USD"}/${date.toISOString().substring(0, 10)}`}>
-          <button onClick={() => {}}>Povijest</button>
-        </Link>
+
         <table>
           <thead>
             <tr>
