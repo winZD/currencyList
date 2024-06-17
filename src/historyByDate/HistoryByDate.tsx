@@ -33,7 +33,7 @@ function HistoryByDate() {
   useEffect(() => {
     getHistoryByDate(currency!, date || "").then((data) => {
       setLoading(true);
-      console.log(data);
+
       setHistoryByDate(data);
       setLoading(false);
     });
@@ -68,9 +68,46 @@ function HistoryByDate() {
       }
       return acc;
     }, new Map());
-    const uniqueEntries = Array.from(groupedExchangeRateNumber.values());
+    const uniqueEntries = Array.from(groupedExchangeRateNumber.values()).sort(
+      (a, b) =>
+        new Date(a.datum_primjene).getTime() -
+        new Date(b.datum_primjene).getTime()
+    );
 
     return uniqueEntries;
+  };
+  const calculateColor = (
+    currentValue: string,
+    previousValue: string | undefined
+  ) => {
+    console.log(
+      `Current Value: ${currentValue}, Previous Value: ${previousValue}`
+    ); // Debugging output
+
+    if (!previousValue) return "transparent"; // No previous value, so no change
+
+    const cleanedCurrentValue = currentValue.replace(",", ".");
+    const cleanedPreviousValue = previousValue.replace(",", ".");
+
+    const currentValueFloat = Number(cleanedCurrentValue);
+    const previousValueFloat = Number(cleanedPreviousValue);
+
+    if (isNaN(currentValueFloat) || isNaN(previousValueFloat)) {
+      console.error("Invalid numeric value found"); // Error handling for non-numeric values
+      return "yellow";
+    }
+
+    if (currentValueFloat > previousValueFloat) {
+      return "green"; // Increase
+    } else if (currentValueFloat < previousValueFloat) {
+      console.log("---------------------------------");
+      console.log(currentValueFloat);
+      console.log(previousValueFloat);
+      console.log("---------------------------------");
+      return "red"; // Decrease
+    } else {
+      return "black"; // No change
+    }
   };
 
   return (
@@ -135,27 +172,70 @@ function HistoryByDate() {
         <tbody>
           {groupedByExchangeRateNumber(
             historyByDate!.filter((data) => data.valuta === "USD")
-          )
-            .sort(
-              (a, b) =>
-                new Date(a.datum_primjene).getTime() -
-                new Date(b.datum_primjene).getTime()
-            )
+          ).map((value, index) => {
+            const prevValue =
+              index > 0
+                ? groupedByExchangeRateNumber(
+                    historyByDate!.filter((data) => data.valuta === "USD")
+                  )[index - 1]
+                : null;
 
-            .map((value, key) => {
-              return (
-                <tr key={key}>
-                  <td>{value.broj_tecajnice}</td>
-                  <td>{value.datum_primjene}</td>
-                  <td>{value.valuta}</td>
-                  <td>{value.drzava}</td>
-                  <td>{value.broj_tecajnice}</td>
-                  <td>{value.kupovni_tecaj}</td>
-                  <td>{value.srednji_tecaj}</td>
-                  <td>{value.prodajni_tecaj}</td>
-                </tr>
-              );
-            })}
+            console.log(prevValue);
+
+            const cleanedCurrentValue = value?.kupovni_tecaj.replace(",", ".");
+            const cleanedPreviousValue = prevValue?.kupovni_tecaj.replace(
+              ",",
+              "."
+            );
+            const relativeChange = prevValue?.kupovni_tecaj
+              ? (
+                  (Number(cleanedCurrentValue) / Number(cleanedPreviousValue) -
+                    1) *
+                  100
+                ).toFixed(2)
+              : "N/A";
+
+            return (
+              <tr key={index}>
+                <td>{value.broj_tecajnice}</td>
+                <td>{value.datum_primjene}</td>
+                <td>{value.valuta}</td>
+                <td>{value.drzava}</td>
+                <td>{value.broj_tecajnice}</td>
+                <td
+                  style={{
+                    background: calculateColor(
+                      value.kupovni_tecaj,
+                      prevValue?.kupovni_tecaj
+                    ),
+                  }}
+                >
+                  {value.kupovni_tecaj}
+                </td>
+                <td
+                  style={{
+                    background: calculateColor(
+                      value.srednji_tecaj,
+                      prevValue?.srednji_tecaj
+                    ),
+                  }}
+                >
+                  {value.srednji_tecaj}
+                </td>
+                <td
+                  style={{
+                    background: calculateColor(
+                      value.prodajni_tecaj,
+                      prevValue?.srednji_tecaj
+                    ),
+                  }}
+                >
+                  {value.prodajni_tecaj}
+                </td>
+                <td>{relativeChange}%</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
