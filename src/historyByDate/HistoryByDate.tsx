@@ -39,8 +39,8 @@ function HistoryByDate() {
     });
   }, []);
 
-  /*   // Group by 'broj_tecajnice' and keep the first entry of each group
-  const groupedByBrojTecajnice = historyByDate!.reduce((acc, curr) => {
+  // Group by 'broj_tecajnice' and keep the first entry of each group
+  /* const groupedByBrojTecajnice = historyByDate!.reduce((acc, curr) => {
     if (!acc.has(curr.broj_tecajnice)) {
       acc.set(curr.broj_tecajnice, curr);
     } else {
@@ -52,12 +52,26 @@ function HistoryByDate() {
       }
     }
     return acc;
-  }, new Map());
+  }, new Map()); */
 
-  // Extract the unique entries
-  const uniqueEntries = Array.from(groupedByBrojTecajnice.values());
+  const groupedByExchangeRateNumber = (data: Currency[]): Currency[] => {
+    const groupedExchangeRateNumber = data.reduce((acc, curr) => {
+      if (!acc.has(curr.broj_tecajnice)) {
+        acc.set(curr.broj_tecajnice, curr);
+      } else {
+        const existingEntry = acc.get(curr.broj_tecajnice);
+        if (
+          new Date(existingEntry.datum_primjene) > new Date(curr.datum_primjene)
+        ) {
+          acc.set(curr.broj_tecajnice, curr);
+        }
+      }
+      return acc;
+    }, new Map());
+    const uniqueEntries = Array.from(groupedExchangeRateNumber.values());
 
-  console.log(uniqueEntries); */
+    return uniqueEntries;
+  };
 
   return (
     <div>
@@ -119,13 +133,15 @@ function HistoryByDate() {
           </tr>
         </thead>
         <tbody>
-          {historyByDate!
+          {groupedByExchangeRateNumber(
+            historyByDate!.filter((data) => data.valuta === "USD")
+          )
             .sort(
               (a, b) =>
                 new Date(a.datum_primjene).getTime() -
                 new Date(b.datum_primjene).getTime()
             )
-            .filter((data) => data.valuta === "USD")
+
             .map((value, key) => {
               return (
                 <tr key={key}>
