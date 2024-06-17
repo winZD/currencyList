@@ -77,7 +77,7 @@ function CurrencyList() {
             onChange={(e) => setSearchValue(e.target.value)}
           />
         </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div className="filter">
           <button
             onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}
           >
@@ -114,11 +114,6 @@ function CurrencyList() {
               <th></th>
               <th></th>
               <th></th>
-
-              {/* <th>Valuta</th>
-            <th>Kupovni za devize</th>
-            <th>Srednji za devize</th>
-            <th>Prodajni za devize</th> */}
             </tr>
           </thead>
           <tbody>
