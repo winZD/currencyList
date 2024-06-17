@@ -26,10 +26,29 @@ function CurrencyList() {
 
     const filteredData = data.filter(
       (item) =>
+        item.broj_tecajnice
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toLowerCase()) ||
+        item.datum_primjene
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toLowerCase()) ||
         item.drzava.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.drzava_iso.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.sifra_valute.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.valuta.toLowerCase().includes(searchValue.toLowerCase())
+        item.kupovni_tecaj
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toLowerCase()) ||
+        item.srednji_tecaj
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toLowerCase()) ||
+        item.prodajni_tecaj
+          .toString()
+          .toLowerCase()
+          .includes(searchValue.toLowerCase())
     );
 
     return filteredData;
@@ -39,10 +58,73 @@ function CurrencyList() {
     if (sortField === "drzava") {
       return order === "asc"
         ? d.sort((a, b) => {
-            return a.drzava.localeCompare(b.drzava);
+            return a.drzava.toLowerCase().localeCompare(b.drzava);
           })
         : d.sort((a, b) => {
-            return b.drzava.localeCompare(a.drzava);
+            return b.drzava.toLowerCase().localeCompare(a.drzava);
+          });
+    }
+    if (sortField === "valuta") {
+      return order === "asc"
+        ? d.sort((a, b) => {
+            return a.valuta.toLowerCase().localeCompare(b.valuta);
+          })
+        : d.sort((a, b) => {
+            return b.valuta.toLowerCase().localeCompare(a.valuta);
+          });
+    }
+    if (sortField === "sifraValute") {
+      return order === "asc"
+        ? d.sort((a, b) => {
+            return Number(a.sifra_valute) - Number(b.sifra_valute);
+          })
+        : d.sort((a, b) => {
+            return Number(b.sifra_valute) - Number(a.sifra_valute);
+          });
+    }
+    if (sortField === "kupovniTecaj") {
+      return order === "asc"
+        ? d.sort((a, b) => {
+            return (
+              Number(a.kupovni_tecaj.replace(",", ".")) -
+              Number(b.kupovni_tecaj.replace(",", "."))
+            );
+          })
+        : d.sort((a, b) => {
+            return (
+              Number(b.kupovni_tecaj.replace(",", ".")) -
+              Number(a.kupovni_tecaj.replace(",", "."))
+            );
+          });
+    }
+    if (sortField === "srednjiTecaj") {
+      return order === "asc"
+        ? d.sort((a, b) => {
+            return (
+              Number(a.srednji_tecaj.replace(",", ".")) -
+              Number(b.srednji_tecaj.replace(",", "."))
+            );
+          })
+        : d.sort((a, b) => {
+            return (
+              Number(b.srednji_tecaj.replace(",", ".")) -
+              Number(a.srednji_tecaj.replace(",", "."))
+            );
+          });
+    }
+    if (sortField === "prodajniTecaj") {
+      return order === "asc"
+        ? d.sort((a, b) => {
+            return (
+              Number(a.prodajni_tecaj.replace(",", ".")) -
+              Number(b.prodajni_tecaj.replace(",", "."))
+            );
+          })
+        : d.sort((a, b) => {
+            return (
+              Number(b.prodajni_tecaj.replace(",", ".")) -
+              Number(a.prodajni_tecaj.replace(",", "."))
+            );
           });
     }
     return d;
@@ -102,14 +184,42 @@ function CurrencyList() {
               <th>Broj tečajnice</th>
               <th>Datum primjene </th>
 
-              <th></th>
-              <th onClick={() => toggleSort("drzava")}>
-                {sortField === "drzava" && (order === "asc" ? "▲" : "▼")}
+              <th onClick={() => toggleSort("valuta")}>
+                {sortField === "valuta" ? (order === "asc" ? "▲" : "▼") : "---"}
               </th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th onClick={() => toggleSort("drzava")}>
+                {sortField === "drzava" ? (order === "asc" ? "▲" : "▼") : "---"}
+                <img src="/vite.svg"></img>
+              </th>
+              <th onClick={() => toggleSort("sifraValute")}>
+                {sortField === "sifraValute"
+                  ? order === "asc"
+                    ? "▲"
+                    : "▼"
+                  : "---"}
+              </th>
+
+              <th onClick={() => toggleSort("kupovniTecaj")}>
+                {sortField === "kupovniTecaj"
+                  ? order === "asc"
+                    ? "▲"
+                    : "▼"
+                  : "---"}
+              </th>
+              <th onClick={() => toggleSort("srednjiTecaj")}>
+                {sortField === "srednjiTecaj"
+                  ? order === "asc"
+                    ? "▲"
+                    : "▼"
+                  : "---"}
+              </th>
+              <th onClick={() => toggleSort("prodajniTecaj")}>
+                {sortField === "prodajniTecaj"
+                  ? order === "asc"
+                    ? "▲"
+                    : "▼"
+                  : "---"}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -132,13 +242,20 @@ function CurrencyList() {
                     {value.valuta}
                   </td>
                   <td>{value.drzava}</td>
-                  <td>{value.broj_tecajnice}</td>
+                  <td>{value.sifra_valute}</td>
                   <td>{value.kupovni_tecaj}</td>
                   <td>{value.srednji_tecaj}</td>
                   <td>{value.prodajni_tecaj}</td>
                 </tr>
               );
             })}
+            {!handleSearch(sortData(currencies)).length && (
+              <tr>
+                <td style={{ textAlign: "center" }} colSpan={8}>
+                  Nema rezultata pretrage!
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
