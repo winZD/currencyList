@@ -6,7 +6,7 @@ const CURRENCY = "USD";
 function Home() {
   return (
     <div className="container">
-      <div className="card">
+      <div className="link-card">
         <Link to="/tecaj">
           <button>Tečaj</button>
         </Link>
