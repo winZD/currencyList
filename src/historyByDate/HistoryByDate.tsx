@@ -98,19 +98,15 @@ function HistoryByDate() {
         type="date"
         onChange={(e) => setDateTo(new Date(e.target.value))}
       ></input>
-      <div>
-        <select
-          value={daysBefore}
-          onChange={handleChange}
-          aria-placeholder="Test"
-        >
+      <div className="custom-select">
+        <select value={daysBefore} onChange={handleChange}>
           {days.map((day) => (
             <option key={day} value={day}>
               {day}
             </option>
           ))}
         </select>
-        <p>Selected day: {daysBefore}</p>
+        {/*  <p>Selected day: {daysBefore}</p> */}
       </div>
       <button
         onClick={() => {
