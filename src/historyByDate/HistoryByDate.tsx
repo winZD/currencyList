@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import {
   getExchangeRateDifferences,
   getHistoryByDate,
@@ -18,6 +18,7 @@ function HistoryByDate() {
 
   const [daysBefore, setDaysBefore] = useState("4");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setDaysBefore(event.target.value);
@@ -91,14 +92,14 @@ function HistoryByDate() {
 
   return (
     <div>
-      <h1>HISTORY BY DATE</h1>
+      <h1>Povijest valuta/datum</h1>
       <input
         disabled={location.state?.prev === "/tecaj"}
         value={dateTo.toISOString().substring(0, 10)}
         type="date"
         onChange={(e) => setDateTo(new Date(e.target.value))}
       ></input>
-      <div className="custom-select">
+      <div>
         <select value={daysBefore} onChange={handleChange}>
           {days.map((day) => (
             <option key={day} value={day}>
@@ -149,8 +150,6 @@ function HistoryByDate() {
                   )[index - 1]
                 : null;
 
-            console.log(prevValue);
-
             const cleanedCurrentValue = value?.kupovni_tecaj.replace(",", ".");
             const cleanedPreviousValue = prevValue?.kupovni_tecaj.replace(
               ",",
@@ -168,7 +167,24 @@ function HistoryByDate() {
               <tr key={index}>
                 <td>{value.broj_tecajnice}</td>
                 <td>{value.datum_primjene}</td>
-                <td>{value.valuta}</td>
+                <td
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    navigate(`/povijest/${value.valuta}`, {
+                      state: {
+                        prev: `/povijest/${value.valuta}/${dateTo
+                          .toISOString()
+                          .substring(0, 10)}`,
+                        params: {
+                          currency: value.valuta,
+                          date: dateTo.toISOString().substring(0, 10),
+                        },
+                      },
+                    })
+                  }
+                >
+                  {value.valuta}
+                </td>
                 <td>{value.drzava}</td>
                 <td>{value.drzava_iso}</td>
                 <td

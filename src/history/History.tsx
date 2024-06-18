@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import {
   getExchangeRateDifferences,
   getHistoryByCurrency,
 } from "../api/currencyList";
 import { Currency } from "../api/models/currency";
 import "./history.css";
+import { days } from "../api/daysData";
 
 function History() {
   const { currency } = useParams();
-
+  const location = useLocation();
+  const [dateTo, setDateTo] = useState(new Date());
+  const [daysBefore, setDaysBefore] = useState("4");
   const [currencyHistory, setCurrencyHistory] = useState<Currency[] | null>(
     null
   );
@@ -21,32 +24,43 @@ function History() {
       setCurrencyHistory(data);
       setLoading(false);
     });
-  }, []);
-
+  }, [currency]);
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDaysBefore(event.target.value);
+  };
   const fetchExchangeRateDifferences = async (
     dateFrom: string,
     dateTo: string
   ) => {
     return await getExchangeRateDifferences(dateFrom, dateTo);
   };
+
+  console.log(location);
   return (
     <div className="container">
-      <h1>HISTORY</h1>
+      <h1>Povijest valuta</h1>
       <button onClick={() => ""}>Povijest tečajnih razlika </button>
-      {loading && "LOADING"}
-      {/*  {currencyHistory !== null && (
-        <div>
-          {currencyHistory.map((history, index) => (
-            <div className="card" key={index}>
-              <span>{history?.drzava}</span>
-              <span>{history?.broj_tecajnice}</span>
-              <span>{history?.kupovni_tecaj}</span>
-              <span>{history?.prodajni_tecaj}</span>
-              <span>{history?.sifra_valute}</span>
-              <span>{history?.srednji_tecaj}</span>
-            </div>
+
+      <input
+        disabled={
+          location.state?.params.currency || location.state?.params.cdate
+        }
+        value={dateTo.toISOString().substring(0, 10)}
+        type="date"
+        onChange={(e) => setDateTo(new Date(e.target.value))}
+      ></input>
+
+      <div>
+        <select value={daysBefore} onChange={handleChange}>
+          {days.map((day) => (
+            <option key={day} value={day}>
+              {day}
+            </option>
           ))}
-        </div> */}
+        </select>
+        {/*  <p>Selected day: {daysBefore}</p> */}
+      </div>
+      {loading && "LOADING..."}
 
       <table>
         <thead>
