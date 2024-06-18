@@ -55,6 +55,34 @@ function CurrencyList() {
   };
   const sortData = (data: Currency[]): Currency[] => {
     const d = data;
+    if (sortField === "brojTecajnice") {
+      return order === "asc"
+        ? d.sort((a, b) => {
+            return (
+              Number(a.broj_tecajnice.replace(",", ".")) -
+              Number(b.broj_tecajnice.replace(",", "."))
+            );
+          })
+        : d.sort((a, b) => {
+            return (
+              Number(b.broj_tecajnice.replace(",", ".")) -
+              Number(a.broj_tecajnice.replace(",", "."))
+            );
+          });
+    }
+    if (sortField === "datumPrimjene") {
+      return order === "asc"
+        ? d.sort(
+            (a, b) =>
+              new Date(a.datum_primjene).getTime() -
+              new Date(b.datum_primjene).getTime()
+          )
+        : d.sort(
+            (a, b) =>
+              new Date(b.datum_primjene).getTime() -
+              new Date(a.datum_primjene).getTime()
+          );
+    }
     if (sortField === "drzava") {
       return order === "asc"
         ? d.sort((a, b) => {
@@ -181,8 +209,34 @@ function CurrencyList() {
         <table>
           <thead>
             <tr>
-              <th>Broj tečajnice</th>
-              <th>Datum primjene </th>
+              <th onClick={() => toggleSort("brojTecajnice")}>
+                Broj tečajnice{" "}
+                <img
+                  height={25}
+                  src={
+                    sortField === "brojTecajnice"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
+              </th>
+              <th onClick={() => toggleSort("datumPrimjene")}>
+                Datum primjene{" "}
+                <img
+                  height={25}
+                  src={
+                    sortField === "datumPrimjene"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
+              </th>
 
               <th onClick={() => toggleSort("valuta")}>
                 <img
