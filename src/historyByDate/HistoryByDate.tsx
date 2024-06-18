@@ -6,6 +6,7 @@ import {
 } from "../api/currencyList";
 import { Currency } from "../api/models/currency";
 import { days } from "../api/daysData";
+import "./historyByDate.css";
 
 function HistoryByDate() {
   const { currency, date } = useParams();
@@ -35,24 +36,10 @@ function HistoryByDate() {
       setLoading(true);
 
       setHistoryByDate(data);
+      console.log(data);
       setLoading(false);
     });
   }, []);
-
-  // Group by 'broj_tecajnice' and keep the first entry of each group
-  /* const groupedByBrojTecajnice = historyByDate!.reduce((acc, curr) => {
-    if (!acc.has(curr.broj_tecajnice)) {
-      acc.set(curr.broj_tecajnice, curr);
-    } else {
-      const existingEntry = acc.get(curr.broj_tecajnice);
-      if (
-        new Date(existingEntry.datum_primjene) > new Date(curr.datum_primjene)
-      ) {
-        acc.set(curr.broj_tecajnice, curr);
-      }
-    }
-    return acc;
-  }, new Map()); */
 
   const groupedByExchangeRateNumber = (data: Currency[]): Currency[] => {
     const groupedExchangeRateNumber = data.reduce((acc, curr) => {
@@ -80,11 +67,7 @@ function HistoryByDate() {
     currentValue: string,
     previousValue: string | undefined
   ) => {
-    console.log(
-      `Current Value: ${currentValue}, Previous Value: ${previousValue}`
-    ); // Debugging output
-
-    if (!previousValue) return "transparent"; // No previous value, so no change
+    if (!previousValue) return "transparent";
 
     const cleanedCurrentValue = currentValue.replace(",", ".");
     const cleanedPreviousValue = previousValue.replace(",", ".");
@@ -100,13 +83,9 @@ function HistoryByDate() {
     if (currentValueFloat > previousValueFloat) {
       return "green"; // Increase
     } else if (currentValueFloat < previousValueFloat) {
-      console.log("---------------------------------");
-      console.log(currentValueFloat);
-      console.log(previousValueFloat);
-      console.log("---------------------------------");
       return "red"; // Decrease
     } else {
-      return "black"; // No change
+      return "yellow"; // No change
     }
   };
 
@@ -114,6 +93,7 @@ function HistoryByDate() {
     <div>
       <h1>HISTORY BY DATE</h1>
       <input
+        disabled={location.state?.prev === "/tecaj"}
         value={dateTo.toISOString().substring(0, 10)}
         type="date"
         onChange={(e) => setDateTo(new Date(e.target.value))}
@@ -121,8 +101,8 @@ function HistoryByDate() {
       <div>
         <select
           value={daysBefore}
-          disabled={location.state?.prev === "/tecaj"}
           onChange={handleChange}
+          aria-placeholder="Test"
         >
           {days.map((day) => (
             <option key={day} value={day}>
@@ -146,16 +126,6 @@ function HistoryByDate() {
       >
         Povijest tečajnih razlika{" "}
       </button>
-      {/* {historyByDate!.map((history, index) => (
-        <div className="card" key={index}>
-          <span>{history?.drzava}</span>
-          <span>{history?.broj_tecajnice}</span>
-          <span>{history?.kupovni_tecaj}</span>
-          <span>{history?.prodajni_tecaj}</span>
-          <span>{history?.sifra_valute}</span>
-          <span>{history?.srednji_tecaj}</span>
-        </div>
-      ))} */}
 
       <table>
         <thead>
@@ -164,19 +134,22 @@ function HistoryByDate() {
             <th>Datum primjene </th>
 
             <th>Valuta</th>
+            <th>Država</th>
+            <th>ISO</th>
             <th>Kupovni za devize</th>
             <th>Srednji za devize</th>
             <th>Prodajni za devize</th>
+            <th>Promjena</th>
           </tr>
         </thead>
         <tbody>
           {groupedByExchangeRateNumber(
-            historyByDate!.filter((data) => data.valuta === "USD")
+            historyByDate!.filter((data) => data.valuta === currency)
           ).map((value, index) => {
             const prevValue =
               index > 0
                 ? groupedByExchangeRateNumber(
-                    historyByDate!.filter((data) => data.valuta === "USD")
+                    historyByDate!.filter((data) => data.valuta === currency)
                   )[index - 1]
                 : null;
 
@@ -201,7 +174,7 @@ function HistoryByDate() {
                 <td>{value.datum_primjene}</td>
                 <td>{value.valuta}</td>
                 <td>{value.drzava}</td>
-                <td>{value.broj_tecajnice}</td>
+                <td>{value.drzava_iso}</td>
                 <td
                   style={{
                     background: calculateColor(
