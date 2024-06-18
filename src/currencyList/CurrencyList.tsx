@@ -185,40 +185,83 @@ function CurrencyList() {
               <th>Datum primjene </th>
 
               <th onClick={() => toggleSort("valuta")}>
-                {sortField === "valuta" ? (order === "asc" ? "▲" : "▼") : "---"}
+                <img
+                  height={25}
+                  src={
+                    sortField === "valuta"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
               </th>
               <th onClick={() => toggleSort("drzava")}>
-                {sortField === "drzava" ? (order === "asc" ? "▲" : "▼") : "---"}
-                <img src="/vite.svg"></img>
+                <img
+                  height={25}
+                  src={
+                    sortField === "drzava"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
               </th>
               <th onClick={() => toggleSort("sifraValute")}>
-                {sortField === "sifraValute"
-                  ? order === "asc"
-                    ? "▲"
-                    : "▼"
-                  : "---"}
+                <img
+                  height={25}
+                  src={
+                    sortField === "sifraValute"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
               </th>
 
               <th onClick={() => toggleSort("kupovniTecaj")}>
-                {sortField === "kupovniTecaj"
-                  ? order === "asc"
-                    ? "▲"
-                    : "▼"
-                  : "---"}
+                <img
+                  height={25}
+                  src={
+                    sortField === "kupovniTecaj"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
               </th>
               <th onClick={() => toggleSort("srednjiTecaj")}>
-                {sortField === "srednjiTecaj"
-                  ? order === "asc"
-                    ? "▲"
-                    : "▼"
-                  : "---"}
+                <img
+                  height={25}
+                  src={
+                    sortField === "srednjiTecaj"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
               </th>
               <th onClick={() => toggleSort("prodajniTecaj")}>
-                {sortField === "prodajniTecaj"
-                  ? order === "asc"
-                    ? "▲"
-                    : "▼"
-                  : "---"}
+                <img
+                  height={25}
+                  src={
+                    sortField === "prodajniTecaj"
+                      ? order === "asc"
+                        ? "./sort-asc.png"
+                        : "./sort-desc.png"
+                      : "./sort.png"
+                  }
+                  alt="sorting"
+                />
               </th>
             </tr>
           </thead>
