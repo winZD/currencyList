@@ -39,26 +39,37 @@ function History() {
   return (
     <div className="container">
       <h1>Povijest valuta</h1>
-      <button onClick={() => ""}>Povijest tečajnih razlika </button>
-
-      <input
-        disabled={
-          location.state?.params.currency || location.state?.params.cdate
-        }
-        value={dateTo.toISOString().substring(0, 10)}
-        type="date"
-        onChange={(e) => setDateTo(new Date(e.target.value))}
-      ></input>
-
-      <div>
-        <select value={daysBefore} onChange={handleChange}>
-          {days.map((day) => (
-            <option key={day} value={day}>
-              {day}
-            </option>
-          ))}
-        </select>
-        {/*  <p>Selected day: {daysBefore}</p> */}
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ width: "100%", display: "flex", columnGap: 5 }}>
+          <input
+            disabled={
+              location.state?.params.currency || location.state?.params.cdate
+            }
+            value={dateTo.toISOString().substring(0, 10)}
+            type="date"
+            onChange={(e) => setDateTo(new Date(e.target.value))}
+          ></input>
+          <select value={daysBefore} onChange={handleChange}>
+            {days.map((day) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
+          {/*  <p>Selected day: {daysBefore}</p> */}
+        </div>
+        <div>
+          {" "}
+          <button onClick={() => ""}>Povijest tečajnih razlika </button>
+        </div>
       </div>
       {loading && "LOADING..."}
 

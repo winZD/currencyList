@@ -93,13 +93,21 @@ function HistoryByDate() {
   return (
     <div>
       <h1>Povijest valuta/datum</h1>
-      <input
-        disabled={location.state?.prev === "/tecaj"}
-        value={dateTo.toISOString().substring(0, 10)}
-        type="date"
-        onChange={(e) => setDateTo(new Date(e.target.value))}
-      ></input>
-      <div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          columnGap: 5,
+          paddingBottom: 5,
+        }}
+      >
+        <input
+          disabled={location.state?.prev === "/tecaj"}
+          value={dateTo.toISOString().substring(0, 10)}
+          type="date"
+          onChange={(e) => setDateTo(new Date(e.target.value))}
+        ></input>
         <select value={daysBefore} onChange={handleChange}>
           {days.map((day) => (
             <option key={day} value={day}>
@@ -108,21 +116,21 @@ function HistoryByDate() {
           ))}
         </select>
         {/*  <p>Selected day: {daysBefore}</p> */}
+        <button
+          onClick={() => {
+            const dateFrom = new Date();
+
+            dateFrom.setDate(dateTo.getDate() - Number(daysBefore));
+
+            fetchExchangeRateDifferences(
+              dateFrom.toISOString().substring(0, 10),
+              dateTo.toISOString().substring(0, 10)
+            );
+          }}
+        >
+          Povijest tečajnih razlika{" "}
+        </button>
       </div>
-      <button
-        onClick={() => {
-          const dateFrom = new Date();
-
-          dateFrom.setDate(dateTo.getDate() - Number(daysBefore));
-
-          fetchExchangeRateDifferences(
-            dateFrom.toISOString().substring(0, 10),
-            dateTo.toISOString().substring(0, 10)
-          );
-        }}
-      >
-        Povijest tečajnih razlika{" "}
-      </button>
 
       <table>
         <thead>
