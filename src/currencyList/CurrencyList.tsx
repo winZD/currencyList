@@ -46,59 +46,14 @@ function CurrencyList() {
   };
 
   /**
-   * Sorts an array of currency objects (`data`) based on a specified field (`sortField`) and order (`order`). The sorting can be performed
-   * in ascending (`asc`) or descending (`desc`) order. The supported fields for sorting include `brojTecajnice`, `datumPrimjene`, `drzava`,
-   * `valuta`, `sifraValute`, `kupovniTecaj`, `srednjiTecaj`, and `prodajniTecaj`. Each field has a specific sorting logic:
-   * - Numeric fields (`brojTecajnice`, `sifraValute`, `kupovniTecaj`, `srednjiTecaj`, `prodajniTecaj`) are sorted numerically after converting commas to dots.
-   * - Date fields (`datumPrimjene`) are sorted based on their timestamp.
-   * - String fields (`drzava`, `valuta`) are sorted alphabetically using locale comparison.
+   * Sorts an array of currency objects based on different fields and orders.
    *
-   * @param {Currency[]} data - An array of currency objects to sort. Each object should have properties matching those checked during sorting.
-   * @param {string} sortField - The name of the field to sort by. Must be one of the following: `"brojTecajnice"`, `"datumPrimjene"`, `"drzava"`, `"valuta"`, `"sifraValute"`, `"kupovniTecaj"`, `"srednjiTecaj"`, `"prodajniTecaj"`.
-   * @param {string} order - The sorting order. Can be either `"asc"` for ascending order or `"desc"` for descending order.
-   * @returns {Currency[]} A new array containing the sorted currency objects.
-   *
-   * @example
-   * // Example usage:
-   * const currencies = [
-   *   { broj_tecajnice: '123', datum_primjene: '2024-01-01', drzava: 'USA', valuta: 'USD', sifra_valute: '123', kupovni_tecaj: 1.23, srednji_tecaj: 1.25, prodajni_tecaj: 1.27 },
-   *   { broj_tecajnice: '456', datum_primjene: '2024-02-01', drzava: 'Germany', valuta: 'EUR', sifra_valute: '456', kupovni_tecaj: 1.45, srednji_tecaj: 1.47, prodajni_tecaj: 1.49 }
-   * ];
-   * const sortField = 'kupovniTecaj';
-   * const order = 'asc';
-   * const sortedCurrencies = sortData(currencies, sortField, order);
-   * console.log(sortedCurrencies); // Sorted array based on 'kupovniTecaj' in ascending order.
+   * @param {Currency[]} data - The array of currency objects to be sorted.
+   * @returns {Currency[]} Sorted array of currency objects.
    */
   const sortData = (data: Currency[]): Currency[] => {
     const d = data;
-    if (sortField === "brojTecajnice") {
-      return order === "asc"
-        ? d.sort((a, b) => {
-            return (
-              Number(a.broj_tecajnice.replace(",", ".")) -
-              Number(b.broj_tecajnice.replace(",", "."))
-            );
-          })
-        : d.sort((a, b) => {
-            return (
-              Number(b.broj_tecajnice.replace(",", ".")) -
-              Number(a.broj_tecajnice.replace(",", "."))
-            );
-          });
-    }
-    if (sortField === "datumPrimjene") {
-      return order === "asc"
-        ? d.sort(
-            (a, b) =>
-              new Date(a.datum_primjene).getTime() -
-              new Date(b.datum_primjene).getTime()
-          )
-        : d.sort(
-            (a, b) =>
-              new Date(b.datum_primjene).getTime() -
-              new Date(a.datum_primjene).getTime()
-          );
-    }
+
     if (sortField === "drzava") {
       return order === "asc"
         ? d.sort((a, b) => {
