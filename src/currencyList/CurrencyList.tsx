@@ -177,6 +177,7 @@ function CurrencyList() {
               Next
             </button>
             <button
+              style={{ marginLeft: 10 }}
               onClick={() => {
                 setLoading(true);
                 getCurrency(date.toISOString().substring(0, 10)).then(
