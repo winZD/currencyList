@@ -137,7 +137,7 @@ function CurrencyList() {
   };
   useEffect(() => {
     setLoading(true);
-    getCurrency().then((data) => {
+    getCurrency(date.toISOString().substring(0, 10)).then((data) => {
       setCurrencies(data);
       setLoading(false);
     });
@@ -175,6 +175,19 @@ function CurrencyList() {
               }
             >
               Next
+            </button>
+            <button
+              onClick={() => {
+                setLoading(true);
+                getCurrency(date.toISOString().substring(0, 10)).then(
+                  (data) => {
+                    setCurrencies(data);
+                    setLoading(false);
+                  }
+                );
+              }}
+            >
+              Datum primjene
             </button>
           </div>
           <Link

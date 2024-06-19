@@ -1,5 +1,5 @@
-export const getCurrency = async () => {
-  const res = fetch("https://api.hnb.hr/tecajn-eur/v3")
+export const getCurrency = async (date: string) => {
+  const res = fetch(`https://api.hnb.hr/tecajn-eur/v3?datum-primjene=${date}`)
     .then((response) => response.json())
     .then((json) => json);
 

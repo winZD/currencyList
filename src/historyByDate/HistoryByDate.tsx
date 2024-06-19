@@ -1,9 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import {
-  getExchangeRateDifferences,
-  getHistoryByDate,
-} from "../api/currencyList";
+import { getExchangeRateDifferences } from "../api/currencyList";
 import { Currency } from "../api/models/currency";
 import { days } from "../api/daysData";
 import "./historyByDate.css";
@@ -32,12 +29,22 @@ function HistoryByDate() {
   };
   useEffect(() => {
     setLoading(true);
+    const dateFrom = date ? new Date(date!) : new Date();
 
-    getHistoryByDate(currency!, date || "").then((data) => {
+    dateFrom.setDate(dateTo.getDate() - Number(daysBefore));
+    getExchangeRateDifferences(
+      dateFrom.toISOString().substring(0, 10),
+      dateTo.toISOString().substring(0, 10)
+    ).then((data) => {
+      setHistoryByDate(data);
+      setLoading(false);
+    });
+
+    /* getHistoryByDate(currency!, date || "").then((data) => {
       setHistoryByDate(data);
 
       setLoading(false);
-    });
+    }); */
   }, []);
 
   /**
