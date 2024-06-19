@@ -298,6 +298,7 @@ function CurrencyList() {
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("valuta")}
               >
+                Valuta
                 <img
                   height={25}
                   src={
@@ -314,6 +315,7 @@ function CurrencyList() {
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("drzava")}
               >
+                Država
                 <img
                   height={25}
                   src={
@@ -330,6 +332,7 @@ function CurrencyList() {
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("sifraValute")}
               >
+                Šifra valute
                 <img
                   height={25}
                   src={
@@ -347,6 +350,7 @@ function CurrencyList() {
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("kupovniTecaj")}
               >
+                Kupovni tečaj
                 <img
                   height={25}
                   src={
@@ -363,6 +367,7 @@ function CurrencyList() {
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("srednjiTecaj")}
               >
+                Srednji tečaj
                 <img
                   height={25}
                   src={
@@ -379,6 +384,7 @@ function CurrencyList() {
                 style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("prodajniTecaj")}
               >
+                Prodajni tečaj
                 <img
                   height={25}
                   src={
