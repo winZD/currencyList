@@ -173,7 +173,13 @@ function CurrencyList() {
     }
     return d;
   };
-
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}.${month}.${year}.`;
+  };
   useEffect(() => {
     setLoading(true);
     getCurrency().then((data) => {
@@ -224,7 +230,7 @@ function CurrencyList() {
         </div>
         <span>Broj tečajnice: {currencies[0]?.broj_tecajnice}</span>
         <br />
-        <span>Datum primjene: {currencies[0]?.datum_primjene}</span>
+        <span>Datum primjene: {formatDate(currencies[0]?.datum_primjene)}</span>
 
         <table>
           <thead>
