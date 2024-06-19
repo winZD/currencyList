@@ -24,53 +24,22 @@ function CurrencyList() {
   };
 
   /**
-   * Filters an array of currency objects based on a search value. The search can match against various properties of the currency objects,
-   * including identifiers like `broj_tecajnice`, dates like `datum_primjene`, country names like `drzava` and `drzava_iso`,
-   * currency codes like `sifra_valute`, and exchange rates like `kupovni_tecaj`, `srednji_tecaj`, and `prodajni_tecaj`.
+   * Filters an array of currency objects based on a search value.
    *
-   * The search is case-insensitive and checks if the search value is included anywhere within the property values.
+   * This function searches through an array of currency objects and returns a new array that includes only those currencies whose country name (`drzava`), ISO country code (`drzava_iso`), currency code (`sifra_valute`), or currency symbol (`valuta`) matches the search value, ignoring case.
    *
-   * @param {Currency[]} data - An array of currency objects to filter. Each object should have properties matching those checked during filtering.
-   * @returns {Currency[]} A new array containing only the items from `data` that match the search criteria.
-   *
-   * @example
-   * // Example usage:
-   * const currencies = [
-   *   { broj_tecajnice: '123', datum_primjene: '2024-01-01', drzava: 'USA', drzava_iso: 'US', sifra_valute: 'USD', kupovni_tecaj: 1.23 },
-   *   { broj_tecajnice: '456', datum_primjene: '2024-02-01', drzava: 'Germany', drzava_iso: 'DE', sifra_valute: 'EUR', kupovni_tecaj: 1.45 }
-   * ];
-   * const searchValue = 'usa';
-   * const filteredCurrencies = handleSearch(currencies);
-   * console.log(filteredCurrencies); // Output will include the currency object(s) where 'USA' matches the search value.
+   * @param {Currency[]} data - The original array of currency objects to filter.
+   * @returns {Currency[]} A new array containing only the currency objects that match the search criteria.
    */
   const handleSearch = (data: Currency[]): Currency[] => {
     if (!searchValue) return data;
 
     const filteredData = data.filter(
       (item) =>
-        item.broj_tecajnice
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()) ||
-        item.datum_primjene
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()) ||
         item.drzava.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.drzava_iso.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.sifra_valute.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.kupovni_tecaj
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()) ||
-        item.srednji_tecaj
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()) ||
-        item.prodajni_tecaj
-          .toString()
-          .toLowerCase()
-          .includes(searchValue.toLowerCase())
+        item.valuta.toLowerCase().includes(searchValue.toLowerCase())
     );
 
     return filteredData;
@@ -262,40 +231,6 @@ function CurrencyList() {
             <tr>
               <th
                 style={{ cursor: "pointer" }}
-                onClick={() => toggleSort("brojTecajnice")}
-              >
-                Broj tečajnice{" "}
-                <img
-                  src={
-                    sortField === "brojTecajnice"
-                      ? order === "asc"
-                        ? "./sort-asc.png"
-                        : "./sort-desc.png"
-                      : "./sort.png"
-                  }
-                  alt="sorting"
-                />
-              </th>
-              <th
-                style={{ cursor: "pointer" }}
-                onClick={() => toggleSort("datumPrimjene")}
-              >
-                Datum primjene{" "}
-                <img
-                  height={25}
-                  src={
-                    sortField === "datumPrimjene"
-                      ? order === "asc"
-                        ? "./sort-asc.png"
-                        : "./sort-desc.png"
-                      : "./sort.png"
-                  }
-                  alt="sorting"
-                />
-              </th>
-
-              <th
-                style={{ cursor: "pointer" }}
                 onClick={() => toggleSort("valuta")}
               >
                 Valuta
@@ -403,8 +338,6 @@ function CurrencyList() {
             {handleSearch(sortData(currencies)).map((value, key) => {
               return (
                 <tr key={key}>
-                  <td>{value.broj_tecajnice}</td>
-                  <td>{value.datum_primjene}</td>
                   <td
                     onClick={() =>
                       navigate(
@@ -429,14 +362,14 @@ function CurrencyList() {
             {searchValue.length &&
             !handleSearch(sortData(currencies)).length ? (
               <tr>
-                <td style={{ textAlign: "center" }} colSpan={8}>
+                <td style={{ textAlign: "center" }} colSpan={6}>
                   Nema rezultata pretrage!
                 </td>
               </tr>
             ) : null}
             {loading && (
               <tr>
-                <td style={{ textAlign: "center" }} colSpan={8}>
+                <td style={{ textAlign: "center" }} colSpan={6}>
                   Loading...
                 </td>
               </tr>

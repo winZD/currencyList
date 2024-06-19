@@ -18,12 +18,13 @@ table {
 }
 
 thead th {
-  background-color: #f2f2f2;
+  background-color: #c81818;
   text-align: left;
   padding: 8px;
   font-weight: bold;
   border-top: 2px solid #ddd;
   border-bottom: 2px solid #ddd;
+  color: white;
 }
 img {
   height: 15px;
