@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import {
   getExchangeRateDifferences,
   getHistoryByDate,
@@ -17,8 +17,6 @@ function HistoryByDate() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [daysBefore, setDaysBefore] = useState("2");
-  /* const location = useLocation();
-  const navigate = useNavigate(); */
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setDaysBefore(event.target.value);
@@ -33,7 +31,6 @@ function HistoryByDate() {
     });
   };
   useEffect(() => {
-    console.log(date);
     setLoading(true);
 
     getHistoryByDate(currency!, date || "").then((data) => {
@@ -111,8 +108,6 @@ function HistoryByDate() {
 
   return (
     <div>
-      <h1>Povijest valuta/datum</h1>
-
       <div className="history-filter">
         <input
           disabled={!!date}
@@ -133,11 +128,10 @@ function HistoryByDate() {
         </select>
 
         {"DATE" + (date || "no date")}
-        {currency}
+
         <button
           onClick={() => {
             const dateFrom = date ? new Date(date!) : new Date();
-            console.log(dateFrom);
 
             dateFrom.setDate(dateTo.getDate() - Number(daysBefore));
 
@@ -204,19 +198,7 @@ function HistoryByDate() {
               <tr key={index}>
                 <td>{value.broj_tecajnice}</td>
                 <td>{value.datum_primjene}</td>
-                <td
-                /*  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    console.log(dateTo);
-                    navigate(
-                      `/povijest/${value.valuta}/${dateTo
-                        .toISOString()
-                        .substring(0, 10)}`
-                    );
-                  }} */
-                >
-                  {value.valuta}
-                </td>
+                <td>{value.valuta}</td>
                 <td>{value.drzava}</td>
                 <td>{value.drzava_iso}</td>
                 <td
