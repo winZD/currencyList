@@ -167,6 +167,7 @@ function CurrencyList() {
                 value={date.toISOString().substring(0, 10)}
                 type="date"
                 onChange={(e) => setDate(new Date(e.target.value))}
+                max={new Date().toISOString().substring(0, 10)}
               ></input>
             </div>{" "}
             <button
