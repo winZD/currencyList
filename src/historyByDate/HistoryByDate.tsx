@@ -127,8 +127,6 @@ function HistoryByDate() {
           ))}
         </select>
 
-        {"DATE" + (date || "no date")}
-
         <button
           onClick={() => {
             const dateFrom = date ? new Date(date!) : new Date();

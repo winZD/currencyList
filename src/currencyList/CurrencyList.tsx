@@ -253,6 +253,9 @@ function CurrencyList() {
             <button onClick={() => {}}>Povijest</button>
           </Link>
         </div>
+        <span>Broj tečajnice: {currencies[0]?.broj_tecajnice}</span>
+        <br />
+        <span>Datum primjene: {currencies[0]?.datum_primjene}</span>
 
         <table>
           <thead>
