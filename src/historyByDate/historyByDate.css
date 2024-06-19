@@ -1,0 +1,6 @@
+.history-filter{
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    padding-bottom: 5px;
+}

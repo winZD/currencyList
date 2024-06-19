@@ -10,9 +10,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tecaj" element={<CurrencyList />} />
-        <Route path="/povijest/:currency" element={<History />} />
+        {/* <Route path="/povijest/:currency" element={<History />} /> */}
 
-        <Route path="/povijest/:currency/:date" element={<HistoryByDate />} />
+        <Route path="/povijest/:currency/*" element={<HistoryByDate />} />
       </Routes>
     </Router>
   );

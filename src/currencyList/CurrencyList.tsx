@@ -10,6 +10,8 @@ function CurrencyList() {
   const [searchValue, setSearchValue] = useState("");
   const [sortField, setSortField] = useState("");
   const [order, setOrder] = useState("none");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const toggleSort = (field: string) => {
@@ -159,8 +161,10 @@ function CurrencyList() {
   };
 
   useEffect(() => {
+    setLoading(true);
     getCurrency().then((data) => {
       setCurrencies(data);
+      setLoading(false);
     });
   }, []);
   return (
@@ -168,7 +172,7 @@ function CurrencyList() {
       <div style={{ width: "100%" }}>
         <div className="filter-wrapper">
           <div className="filter">
-            <div className="input-container">
+            <div style={{ marginRight: 15 }}>
               <input
                 type="text"
                 placeholder="Pretraži"
@@ -183,8 +187,7 @@ function CurrencyList() {
             >
               Prev
             </button>
-            {/*  <span>{date.toISOString().substring(0, 10)}</span> */}
-            <div className="input-container">
+            <div>
               <input
                 value={date.toISOString().substring(0, 10)}
                 type="date"
@@ -209,10 +212,12 @@ function CurrencyList() {
         <table>
           <thead>
             <tr>
-              <th onClick={() => toggleSort("brojTecajnice")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("brojTecajnice")}
+              >
                 Broj tečajnice{" "}
                 <img
-                  height={25}
                   src={
                     sortField === "brojTecajnice"
                       ? order === "asc"
@@ -223,7 +228,10 @@ function CurrencyList() {
                   alt="sorting"
                 />
               </th>
-              <th onClick={() => toggleSort("datumPrimjene")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("datumPrimjene")}
+              >
                 Datum primjene{" "}
                 <img
                   height={25}
@@ -238,7 +246,10 @@ function CurrencyList() {
                 />
               </th>
 
-              <th onClick={() => toggleSort("valuta")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("valuta")}
+              >
                 <img
                   height={25}
                   src={
@@ -251,7 +262,10 @@ function CurrencyList() {
                   alt="sorting"
                 />
               </th>
-              <th onClick={() => toggleSort("drzava")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("drzava")}
+              >
                 <img
                   height={25}
                   src={
@@ -264,7 +278,10 @@ function CurrencyList() {
                   alt="sorting"
                 />
               </th>
-              <th onClick={() => toggleSort("sifraValute")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("sifraValute")}
+              >
                 <img
                   height={25}
                   src={
@@ -278,7 +295,10 @@ function CurrencyList() {
                 />
               </th>
 
-              <th onClick={() => toggleSort("kupovniTecaj")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("kupovniTecaj")}
+              >
                 <img
                   height={25}
                   src={
@@ -291,7 +311,10 @@ function CurrencyList() {
                   alt="sorting"
                 />
               </th>
-              <th onClick={() => toggleSort("srednjiTecaj")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("srednjiTecaj")}
+              >
                 <img
                   height={25}
                   src={
@@ -304,7 +327,10 @@ function CurrencyList() {
                   alt="sorting"
                 />
               </th>
-              <th onClick={() => toggleSort("prodajniTecaj")}>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleSort("prodajniTecaj")}
+              >
                 <img
                   height={25}
                   src={
@@ -346,10 +372,18 @@ function CurrencyList() {
                 </tr>
               );
             })}
-            {!handleSearch(sortData(currencies)).length && (
+            {searchValue.length &&
+            !handleSearch(sortData(currencies)).length ? (
               <tr>
                 <td style={{ textAlign: "center" }} colSpan={8}>
                   Nema rezultata pretrage!
+                </td>
+              </tr>
+            ) : null}
+            {loading && (
+              <tr>
+                <td style={{ textAlign: "center" }} colSpan={8}>
+                  Loading...
                 </td>
               </tr>
             )}

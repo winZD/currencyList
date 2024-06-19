@@ -9,16 +9,16 @@ import { days } from "../api/daysData";
 import "./historyByDate.css";
 
 function HistoryByDate() {
-  const { currency, date } = useParams();
+  const { currency, "*": date } = useParams();
 
   const [historyByDate, setHistoryByDate] = useState<Currency[] | null>([]);
-  const [dateTo, setDateTo] = useState(new Date());
+  const [dateTo, setDateTo] = useState(date ? new Date(date) : new Date());
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [daysBefore, setDaysBefore] = useState("4");
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [daysBefore, setDaysBefore] = useState("2");
+  /* const location = useLocation();
+  const navigate = useNavigate(); */
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setDaysBefore(event.target.value);
@@ -33,15 +33,22 @@ function HistoryByDate() {
     });
   };
   useEffect(() => {
-    getHistoryByDate(currency!, date || "").then((data) => {
-      setLoading(true);
+    console.log(date);
+    setLoading(true);
 
+    getHistoryByDate(currency!, date || "").then((data) => {
       setHistoryByDate(data);
-      console.log(data);
+
       setLoading(false);
     });
   }, []);
 
+  /**
+   * Groups currency data by exchange rate number and returns the latest entry for each group based on the transaction date.
+   *
+   * @param {Currency[]} data - An array of currency objects where each object represents a currency.
+   * @returns {Currency[]} An array of unique currency entries sorted by the transaction date in descending order.
+   */
   const groupedByExchangeRateNumber = (data: Currency[]): Currency[] => {
     const groupedExchangeRateNumber = data.reduce((acc, curr) => {
       if (!acc.has(curr.broj_tecajnice)) {
@@ -58,12 +65,24 @@ function HistoryByDate() {
     }, new Map());
     const uniqueEntries = Array.from(groupedExchangeRateNumber.values()).sort(
       (a, b) =>
-        new Date(a.datum_primjene).getTime() -
-        new Date(b.datum_primjene).getTime()
+        new Date(b.datum_primjene).getTime() -
+        new Date(a.datum_primjene).getTime()
     );
 
     return uniqueEntries;
   };
+
+  /**
+   * Calculates the color based on the comparison between the current and previous values.
+   *
+   * @param {string} currentValue - The current value to compare against the previous value.
+   * @param {string | undefined} previousValue - The previous value to compare with the current value. If undefined, it defaults to comparing with a transparent state.
+   * @returns {string} A color indicating the relationship between the current and previous values:
+   *   - "transparent" if there is no previous value or if both values are invalid.
+   *   - "yellow" if either value is invalid.
+   *   - "green" if the current value is greater than the previous value (indicating an increase).
+   *   - "red" if the current value is less than the previous value (indicating a decrease).
+   */
   const calculateColor = (
     currentValue: string,
     previousValue: string | undefined
@@ -86,7 +105,7 @@ function HistoryByDate() {
     } else if (currentValueFloat < previousValueFloat) {
       return "red"; // Decrease
     } else {
-      return "yellow"; // No change
+      return "transparent"; // No change
     }
   };
 
@@ -94,17 +113,14 @@ function HistoryByDate() {
     <div>
       <h1>Povijest valuta/datum</h1>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          columnGap: 5,
-          paddingBottom: 5,
-        }}
-      >
+      <div className="history-filter">
         <input
-          disabled={location.state?.prev === "/tecaj"}
-          value={dateTo.toISOString().substring(0, 10)}
+          disabled={!!date}
+          value={
+            date
+              ? dateTo.toISOString().substring(0, 10)
+              : new Date().toISOString().substring(0, 10)
+          }
           type="date"
           onChange={(e) => setDateTo(new Date(e.target.value))}
         ></input>
@@ -115,10 +131,13 @@ function HistoryByDate() {
             </option>
           ))}
         </select>
-        {/*  <p>Selected day: {daysBefore}</p> */}
+
+        {"DATE" + (date || "no date")}
+        {currency}
         <button
           onClick={() => {
-            const dateFrom = new Date();
+            const dateFrom = date ? new Date(date!) : new Date();
+            console.log(dateFrom);
 
             dateFrom.setDate(dateTo.getDate() - Number(daysBefore));
 
@@ -137,7 +156,6 @@ function HistoryByDate() {
           <tr>
             <th>Broj tečajnice</th>
             <th>Datum primjene </th>
-
             <th>Valuta</th>
             <th>Država</th>
             <th>ISO</th>
@@ -163,6 +181,17 @@ function HistoryByDate() {
               ",",
               "."
             );
+            /**
+             * Calculates the relative change between the current value (`cleanedCurrentValue`) and the previous value (`cleanedPreviousValue`)
+             * based on the exchange rate (`prevValue.kupovni_tecaj`). The calculation is done by dividing the current value by the previous value,
+             * subtracting 1, and then multiplying by 100 to get a percentage increase or decrease. The result is rounded to two decimal places.
+             * If `prevValue.kupovni_tecaj` is not available, the function returns "N/A".
+             *
+             * @param {Object} prevValue - An object containing the previous value's details, including the exchange rate (`kupovni_tecaj`).
+             * @param {number} cleanedCurrentValue - The cleaned-up current value, expected to be a numeric string or number.
+             * @param {number} cleanedPreviousValue - The cleaned-up previous value, expected to be a numeric string or number.
+             * @returns {string} The relative change as a percentage (e.g., "5.00") if the exchange rate is available, otherwise "N/A".
+             */
             const relativeChange = prevValue?.kupovni_tecaj
               ? (
                   (Number(cleanedCurrentValue) / Number(cleanedPreviousValue) -
@@ -176,20 +205,15 @@ function HistoryByDate() {
                 <td>{value.broj_tecajnice}</td>
                 <td>{value.datum_primjene}</td>
                 <td
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    navigate(`/povijest/${value.valuta}`, {
-                      state: {
-                        prev: `/povijest/${value.valuta}/${dateTo
-                          .toISOString()
-                          .substring(0, 10)}`,
-                        params: {
-                          currency: value.valuta,
-                          date: dateTo.toISOString().substring(0, 10),
-                        },
-                      },
-                    })
-                  }
+                /*  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    console.log(dateTo);
+                    navigate(
+                      `/povijest/${value.valuta}/${dateTo
+                        .toISOString()
+                        .substring(0, 10)}`
+                    );
+                  }} */
                 >
                   {value.valuta}
                 </td>
@@ -229,6 +253,13 @@ function HistoryByDate() {
               </tr>
             );
           })}
+          {loading && (
+            <tr>
+              <td style={{ textAlign: "center" }} colSpan={9}>
+                Loading...
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
