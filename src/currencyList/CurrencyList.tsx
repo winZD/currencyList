@@ -172,12 +172,10 @@ function CurrencyList() {
             </div>{" "}
             <button
               disabled={
-                (date.getDate() === new Date().getDate() &&
-                  date.getMonth() === new Date().getMonth() &&
-                  date.getFullYear() === new Date().getFullYear()) ||
-                date.getFullYear() > new Date().getFullYear() ||
-                date.getMonth() > new Date().getMonth() ||
-                date.getDate() > new Date().getDate()
+                new Date(date).setHours(0, 0, 0, 0) >
+                  new Date().setHours(0, 0, 0, 0) ||
+                new Date(date).setHours(0, 0, 0, 0) ===
+                  new Date().setHours(0, 0, 0, 0)
               }
               onClick={() =>
                 setDate(new Date(date.setDate(date.getDate() + 1)))
