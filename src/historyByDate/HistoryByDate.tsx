@@ -39,12 +39,6 @@ function HistoryByDate() {
       setHistoryByDate(data);
       setLoading(false);
     });
-
-    /* getHistoryByDate(currency!, date || "").then((data) => {
-      setHistoryByDate(data);
-
-      setLoading(false);
-    }); */
   }, []);
 
   /**
@@ -118,11 +112,7 @@ function HistoryByDate() {
       <div className="history-filter">
         <input
           disabled={!!date}
-          value={
-            date
-              ? dateTo.toISOString().substring(0, 10)
-              : new Date().toISOString().substring(0, 10)
-          }
+          value={dateTo.toISOString().substring(0, 10)}
           type="date"
           onChange={(e) => setDateTo(new Date(e.target.value))}
         ></input>
