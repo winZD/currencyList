@@ -141,7 +141,7 @@ function CurrencyList() {
       setCurrencies(data);
       setLoading(false);
     });
-  }, []);
+  }, [date]);
   return (
     <>
       <div style={{ width: "100%" }}>
