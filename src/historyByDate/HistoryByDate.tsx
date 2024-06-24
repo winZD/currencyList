@@ -220,7 +220,7 @@ function HistoryByDate() {
                   style={{
                     background: calculateColor(
                       value.prodajni_tecaj,
-                      prevValue?.srednji_tecaj
+                      prevValue?.prodajni_tecaj
                     ),
                   }}
                 >
