@@ -11,7 +11,7 @@ This app contains data about currency list
 ### Installation
 
 - Clone the repository: https://github.com/winZD/currenyList
-- cd currenyList(if you are not positioned in folder)
+- cd currencyList(if you are not positioned in folder)
 - npm install
 
 ### Usage
